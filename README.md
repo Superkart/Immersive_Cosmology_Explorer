@@ -63,11 +63,7 @@ Open the project in Unity 2022.3.62f3.
 Open the scene Assets/Scenes/Main.unity.
 Press Play to test in the editor, or build to your VR headset from File → Build Settings.
 
-## 8. Branching (Optional)
-git checkout -b feature/point-cloud-viewer
-git push -u origin feature/point-cloud-viewer
-
-## 9. Troubleshooting
+## 8. Troubleshooting
 If Unity packages are missing, delete the "Library" folder and reopen the project.
 If large files are missing, run git lfs pull.
 If VR is not detected, check your active OpenXR runtime (SteamVR, Oculus PC, etc.).
