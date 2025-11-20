@@ -1,8 +1,11 @@
 using UnityEngine;
 using SFB;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class UiManager_Desktop : MonoBehaviour
 {
+    [SerializeField] private List<GameObject> ListOfMenus;
     [SerializeField] private GameObject LoadDataPanel;
     [SerializeField] private GameObject LoadSessionPanel;
 
@@ -10,20 +13,16 @@ public class UiManager_Desktop : MonoBehaviour
 
     void Start()
     {
-        ShowLoadDataPanel();
+        DisableMenus();
+        ShowPanel(ListOfMenus[0]);
     }
 
-    public void ShowLoadDataPanel()
+    public void ShowPanel(GameObject Menu)
     {
-        LoadDataPanel.SetActive(true);
-        LoadSessionPanel.SetActive(false);
+        DisableMenus();
+        Menu.SetActive(true);
     }
 
-    public void ShowSessionPanel()
-    {
-        LoadDataPanel.SetActive(false);
-        LoadSessionPanel.SetActive(true);
-    }
 
     // Called by Load Button
     public void OnLoadDataClicked()
@@ -36,9 +35,22 @@ public class UiManager_Desktop : MonoBehaviour
             Debug.Log("Selected folder: " + folderPath);
 
             dataImporter.LoadDataFromFolder(folderPath);
-
-            ShowSessionPanel(); // Move to next panel
         }
+
+        ShowPanel(ListOfMenus[3]);
+        DisableMenu(ListOfMenus[0]);
+    }
+
+    private void DisableMenus()
+    {
+        for(int i = 0; i < ListOfMenus.Count; i++)
+        {
+            ListOfMenus[i].SetActive(false);
+        }
+    }
+    private void DisableMenu(GameObject Menu)
+    {
+        Menu.SetActive(false);
     }
 
 }
