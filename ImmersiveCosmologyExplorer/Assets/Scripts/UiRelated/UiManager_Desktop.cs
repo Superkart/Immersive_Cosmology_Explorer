@@ -6,9 +6,6 @@ using Unity.VisualScripting;
 public class UiManager_Desktop : MonoBehaviour
 {
     [SerializeField] private List<GameObject> ListOfMenus;
-    [SerializeField] private GameObject LoadDataPanel;
-    [SerializeField] private GameObject LoadSessionPanel;
-
     public NewDataImporter dataImporter; // assign in inspector
 
     void Start()
