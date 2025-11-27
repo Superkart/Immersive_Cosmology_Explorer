@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -177,6 +177,10 @@ public class NewDataImporter : MonoBehaviour
         GameObject obj = new GameObject("HydroParticles_" + frameNum);
         obj.AddComponent<MeshFilter>().mesh = mesh;
         obj.AddComponent<MeshRenderer>().material = Resources.Load<Material>("PointCloud");
+
+        // 🟩 FIX — Store the object so DataManipulator can find it
+        pointCloudObjects.Add(obj);
+
         obj.transform.parent = parent.transform;
     }
 

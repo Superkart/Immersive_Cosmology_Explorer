@@ -5,11 +5,13 @@ public class VisualizationSceneController : MonoBehaviour
     public NewDataImporter importer;
     public DataManipulator dataManipulator;
 
+    public Transform playerRig;   // assign XR Rig or camera rig root in inspector
+
     void Start()
     {
         Debug.Log("Visualization Scene Started.");
 
-        // 1. Make sure dataset path exists
+        // 1. Need dataset!
         if (string.IsNullOrEmpty(SessionManager.Instance.selectedDataFolder))
         {
             Debug.LogError("No dataset path found! You must load a dataset first.");
@@ -19,40 +21,51 @@ public class VisualizationSceneController : MonoBehaviour
         // 2. Load the dataset
         importer.LoadDataFromFolder(SessionManager.Instance.selectedDataFolder);
 
-        // 3. If a session exists → apply saved parameters
+        // 3. Apply session if present
         if (SessionManager.Instance.loadedSessionData != null)
         {
             ApplySavedSession(SessionManager.Instance.loadedSessionData);
         }
     }
 
-    private void ApplySavedSession(SessionData session)
+    private void ApplySavedSession(SessionData s)
     {
-        if (session == null)
-            return;
+        if (s == null) return;
 
         Debug.Log("Applying saved session settings...");
 
-        // Restore manipulator values  
-        if (session.manipState != null)
+        // ----------------------
+        // APPLY PLAYER POSITION
+        // ----------------------
+        if (playerRig != null && s.playerPos != null && s.playerRot != null)
         {
-            dataManipulator.SetPointSize(session.manipState.pointSize);
-            dataManipulator.SetAlpha(session.manipState.alpha);
-            dataManipulator.SetFilter(session.manipState.filterMin,
-                                      session.manipState.filterMax);
+            playerRig.position = new Vector3(
+                s.playerPos[0],
+                s.playerPos[1],
+                s.playerPos[2]
+            );
+
+            playerRig.rotation = new Quaternion(
+                s.playerRot[0],
+                s.playerRot[1],
+                s.playerRot[2],
+                s.playerRot[3]
+            );
         }
 
-        // Restore player  
-        if (session.playerState != null)
+        // ----------------------
+        // APPLY DATA MANIPULATION
+        // ----------------------
+        if (dataManipulator != null)
         {
-            if (Camera.main != null)
-            {
-                Camera.main.transform.position = session.playerState.pos;
-                Camera.main.transform.rotation = Quaternion.Euler(session.playerState.rot);
-            }
+            dataManipulator.SetPointSize(s.pointSize);
+            dataManipulator.SetAlpha(s.alpha);
+            dataManipulator.SetFilter(s.filterMin, s.filterMax);
+
+            if (!s.visibilityOn)
+                dataManipulator.ToggleVisibility();
         }
 
         Debug.Log("✔ Session restored!");
     }
-
 }

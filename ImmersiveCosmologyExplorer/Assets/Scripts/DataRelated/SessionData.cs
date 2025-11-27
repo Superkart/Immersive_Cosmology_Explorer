@@ -1,26 +1,19 @@
-using UnityEngine;
-
 [System.Serializable]
-public class ManipulationState
+public class SessionData
 {
+    public string sessionName;
+
+    // Which dataset this session belongs to
+    public string datasetId;
+
+    // Player transform
+    public float[] playerPos;   // length 3
+    public float[] playerRot;   // length 4
+
+    // Manipulation settings
     public float pointSize;
     public float alpha;
     public float filterMin;
     public float filterMax;
-}
-
-[System.Serializable]
-public class PlayerState
-{
-    public Vector3 pos;
-    public Vector3 rot;
-}
-
-[System.Serializable]
-public class SessionData
-{
-    public string datasetId;
-
-    public ManipulationState manipState;
-    public PlayerState playerState;
+    public bool visibilityOn;
 }

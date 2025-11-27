@@ -13,11 +13,10 @@ public class DesktopUiManager : MonoBehaviour
 
     private string sessionsFolder;
 
-    void Start()
+    private void Start()
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            // Folder where all sessions are saved
             sessionsFolder = Path.Combine(
                 System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
                 "ICE_Sessions"
@@ -26,11 +25,10 @@ public class DesktopUiManager : MonoBehaviour
             if (!Directory.Exists(sessionsFolder))
                 Directory.CreateDirectory(sessionsFolder);
 
-            RefreshSessionDropdown();
             InitializeUI();
         }
-        
     }
+
 
     private void InitializeUI()
     {
@@ -81,6 +79,8 @@ public class DesktopUiManager : MonoBehaviour
         SessionManager.Instance.currentDatasetID = SimpleHash(folder);
 
         Debug.Log("Dataset validated and loaded. ID: " + SessionManager.Instance.currentDatasetID);
+        RefreshSessionDropdown();
+
     }
 
     // ---------------------------------------------------------
@@ -180,11 +180,21 @@ public class DesktopUiManager : MonoBehaviour
         List<string> options = new List<string>();
         options.Add("New Session");
 
-        if (Directory.Exists(sessionsFolder))
+        // Don't filter until a dataset is loaded
+        string currentDatasetID = SessionManager.Instance.currentDatasetID;
+
+        if (Directory.Exists(sessionsFolder) && !string.IsNullOrEmpty(currentDatasetID))
         {
             foreach (string file in Directory.GetFiles(sessionsFolder, "*.json"))
             {
-                options.Add(Path.GetFileNameWithoutExtension(file));
+                string json = File.ReadAllText(file);
+                SessionData sd = JsonUtility.FromJson<SessionData>(json);
+
+                // Only include sessions belonging to this dataset
+                if (sd.datasetId == currentDatasetID)
+                {
+                    options.Add(Path.GetFileNameWithoutExtension(file));
+                }
             }
         }
 
