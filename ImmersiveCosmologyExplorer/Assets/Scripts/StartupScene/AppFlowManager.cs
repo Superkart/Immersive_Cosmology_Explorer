@@ -7,4 +7,9 @@ public class AppFlowManager : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
+
+    public void LoadStartupScene()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

@@ -3,6 +3,7 @@ using TMPro;
 using SFB;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class DesktopUiManager : MonoBehaviour
 {
@@ -14,17 +15,21 @@ public class DesktopUiManager : MonoBehaviour
 
     void Start()
     {
-        // Folder where all sessions are saved
-        sessionsFolder = Path.Combine(
-            System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
-            "ICE_Sessions"
-        );
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            // Folder where all sessions are saved
+            sessionsFolder = Path.Combine(
+                System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
+                "ICE_Sessions"
+            );
 
-        if (!Directory.Exists(sessionsFolder))
-            Directory.CreateDirectory(sessionsFolder);
+            if (!Directory.Exists(sessionsFolder))
+                Directory.CreateDirectory(sessionsFolder);
 
-        RefreshSessionDropdown();
-        InitializeUI();
+            RefreshSessionDropdown();
+            InitializeUI();
+        }
+        
     }
 
     private void InitializeUI()
