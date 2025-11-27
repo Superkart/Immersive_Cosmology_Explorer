@@ -178,8 +178,6 @@ public class NewDataImporter : MonoBehaviour
         obj.AddComponent<MeshFilter>().mesh = mesh;
         obj.AddComponent<MeshRenderer>().material = Resources.Load<Material>("PointCloud");
         obj.transform.parent = parent.transform;
-
-        pointCloudObjects.Add(obj);
     }
 
 
@@ -237,6 +235,5 @@ public class NewDataImporter : MonoBehaviour
     {
         return pointCloudObjects;
     }
-
 
 }
