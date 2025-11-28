@@ -3,46 +3,52 @@ using UnityEngine.UI;
 
 public class DesktopVisualizationUI : MonoBehaviour
 {
-    [Header("References")]
     public DataManipulator manipulator;
-    public SessionSaver sessionSaver;
     public NewDataImporter importer;
+    public SessionSaver saver;
 
-    [Header("Slider Controls")]
-    public Slider sizeSlider;
+    [Header("Sliders")]
     public Slider transparencySlider;
-    public Slider filterMinSlider;
-    public Slider filterMaxSlider;
+    public Slider sizeSlider;
 
     [Header("Buttons")]
-    public Button playButton;
     public Button pauseButton;
-    public Button saveButton;
+    public Button resumeButton;
+    public Button saveSessionButton;
 
     void Start()
     {
-        if (sizeSlider != null)
-            sizeSlider.onValueChanged.AddListener(v => manipulator.SetPointSize(v));
+        // Wire slider callbacks
+        transparencySlider.onValueChanged.AddListener(OnTransparencyChange);
+        sizeSlider.onValueChanged.AddListener(OnSizeChange);
 
-        if (transparencySlider != null)
-            transparencySlider.onValueChanged.AddListener(v => manipulator.SetAlpha(v));
+        pauseButton.onClick.AddListener(PauseTime);
+        resumeButton.onClick.AddListener(ResumeTime);
+        saveSessionButton.onClick.AddListener(SaveSession);
+    }
 
-        if (filterMinSlider != null && filterMaxSlider != null)
-        {
-            filterMinSlider.onValueChanged.AddListener(v =>
-                manipulator.SetFilter(filterMinSlider.value, filterMaxSlider.value));
+    public void OnTransparencyChange(float value)
+    {
+        manipulator.SetAlpha(value);
+    }
 
-            filterMaxSlider.onValueChanged.AddListener(v =>
-                manipulator.SetFilter(filterMinSlider.value, filterMaxSlider.value));
-        }
+    public void OnSizeChange(float value)
+    {
+        manipulator.SetPointSize(value);
+    }
 
-        if (playButton != null)
-            playButton.onClick.AddListener(() => importer.Play());
+    public void PauseTime()
+    {
+        importer.Pause();
+    }
 
-        if (pauseButton != null)
-            pauseButton.onClick.AddListener(() => importer.Pause());
+    public void ResumeTime()
+    {
+        importer.Resume();
+    }
 
-        if (saveButton != null)
-            saveButton.onClick.AddListener(() => sessionSaver.SaveSession());
+    public void SaveSession()
+    {
+        saver.SaveSession();
     }
 }

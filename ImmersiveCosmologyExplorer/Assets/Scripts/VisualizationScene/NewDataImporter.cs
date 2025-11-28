@@ -241,14 +241,15 @@ public class NewDataImporter : MonoBehaviour
         return pointCloudObjects;
     }
 
-    public void Play()
-    {
-        isTimeLapseActive = true;
-    }
-
     public void Pause()
     {
         isTimeLapseActive = false;
     }
+
+    public void Resume()
+    {
+        isTimeLapseActive = true;
+    }
+
 
 }
