@@ -21,12 +21,19 @@ public class VisualizationSceneController : MonoBehaviour
         // 2. Load the dataset
         importer.LoadDataFromFolder(SessionManager.Instance.selectedDataFolder);
 
-        // 3. Apply session if present
+        // 2.5 🔹 Apply manipulator defaults once clouds exist
+        if (dataManipulator != null)
+        {
+            dataManipulator.ApplyFromCurrent();
+        }
+
+        // 3. Apply session if present (this can override defaults)
         if (SessionManager.Instance.loadedSessionData != null)
         {
             ApplySavedSession(SessionManager.Instance.loadedSessionData);
         }
     }
+
 
     private void ApplySavedSession(SessionData s)
     {

@@ -198,6 +198,7 @@ public class NewDataImporter : MonoBehaviour
     {
         timer = 0f;
         isTimeLapseActive = true;
+        isLooping = true;
         Debug.Log("Timeline autoplay started");
     }
 

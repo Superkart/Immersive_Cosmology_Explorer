@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class DataManipulator : MonoBehaviour
@@ -9,11 +9,16 @@ public class DataManipulator : MonoBehaviour
     // -------------------------------
     // VALUES TO SAVE / RESTORE
     // -------------------------------
-    public float currentPointSize = 0f;     // 0–1 UI range
-    public float currentAlpha = 1f;         // 0–1 UI range
+    [Range(0f, 1f)]
+    public float currentPointSize = 0.2f;   // default a bit > 0 so we see something
+
+    [Range(0f, 1f)]
+    public float currentAlpha = 1f;
+
     public float currentFilterMin = 0f;
     public float currentFilterMax = 1f;
-    public bool currentVisibility = true;   // <-- must update on toggle!
+
+    public bool currentVisibility = true;
 
     // Internal cache so we don't repeatedly find materials
     private List<Material> cachedMaterials = new List<Material>();
@@ -37,6 +42,27 @@ public class DataManipulator : MonoBehaviour
 
         materialsCached = true;
         Debug.Log("[DataManipulator] Cached " + cachedMaterials.Count + " materials.");
+    }
+
+    // ðŸ”¹ NEW: convenience function to re-apply all current values
+    public void ApplyFromCurrent()
+    {
+        // Guard: importer must have loaded data already
+        if (importer == null) return;
+
+        SetPointSize(currentPointSize);
+        SetAlpha(currentAlpha);
+        SetFilter(currentFilterMin, currentFilterMax);
+    }
+
+    // ðŸ”¹ NEW: when values change in inspector *during Play mode*, apply them
+    private void OnValidate()
+    {
+        // OnValidate also runs in edit mode; only act when playing
+        if (!Application.isPlaying) return;
+        if (importer == null) return;
+
+        ApplyFromCurrent();
     }
 
     // -------------------------------
@@ -98,7 +124,7 @@ public class DataManipulator : MonoBehaviour
 
         bool newState = !clouds[0].activeSelf;
 
-        currentVisibility = newState;    // <-- IMPORTANT: store state for session
+        currentVisibility = newState;
 
         foreach (GameObject go in clouds)
             go.SetActive(newState);
