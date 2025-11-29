@@ -51,4 +51,9 @@ public class DesktopVisualizationUI : MonoBehaviour
     {
         saver.SaveSession();
     }
+
+    public void TestSize(float value)
+    {
+        manipulator.TestSize(value);
+    }
 }

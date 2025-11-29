@@ -13,20 +13,20 @@ public class NewDataImporter : MonoBehaviour
 
     private string dataFolderPath = "";
 
-    private List<GameObject> timeStepParents = new List<GameObject>();
-    private List<GameObject> pointCloudObjects = new List<GameObject>();
+    public List<GameObject> timeStepParents = new List<GameObject>();
+    public List<GameObject> pointCloudObjects = new List<GameObject>();
 
-    private int currentTimestepIndex = 0;
-    private float timer;
-    private bool isTimeLapseActive = false;
+    public int currentTimestepIndex = 0;
+    public float timer;
+    public bool isTimeLapseActive = false;
     public float delayBetweenTimeSteps = 1.0f;
-    private int totalTimesteps;
-    private bool isLooping = false;
-    private bool arePointCloudsVisible = true;
+    public int totalTimesteps;
+    public bool isLooping = false;
+    public bool arePointCloudsVisible = true;
 
-    private List<bool> particleVisibility = new List<bool>();
-    private List<int> frameNumbers = new List<int>();
-    private List<int> allFrames = new List<int>();
+    public List<bool> particleVisibility = new List<bool>();
+    public List<int> frameNumbers = new List<int>();
+    public List<int> allFrames = new List<int>();
 
 
     // --- NEW METHOD: Called by Desktop UI ---

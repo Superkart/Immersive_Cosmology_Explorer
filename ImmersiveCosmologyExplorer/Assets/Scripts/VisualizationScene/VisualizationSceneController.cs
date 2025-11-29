@@ -30,7 +30,7 @@ public class VisualizationSceneController : MonoBehaviour
         // 3. Apply session if present (this can override defaults)
         if (SessionManager.Instance.loadedSessionData != null)
         {
-            ApplySavedSession(SessionManager.Instance.loadedSessionData);
+            ApplySavedSessionNew(SessionManager.Instance.loadedSessionData);
         }
     }
 
@@ -75,4 +75,57 @@ public class VisualizationSceneController : MonoBehaviour
 
         Debug.Log("✔ Session restored!");
     }
+    private void ApplySavedSessionNew(SessionData s)
+    {
+        if (s == null)
+        {
+            Debug.Log("No saved session selected. Skipping restore.");
+            return;
+        }
+
+        Debug.Log("Applying saved session settings...");
+
+        // --------------------------------------
+        // SAFELY RESTORE PLAYER POSITION/ROTATION
+        // --------------------------------------
+        bool validPlayerData =
+            s.playerPos != null && s.playerPos.Length == 3 &&
+            s.playerRot != null && s.playerRot.Length == 4;
+
+        if (!validPlayerData)
+        {
+            Debug.LogWarning("⚠ Saved session missing valid playerPos/playerRot; skipping player restore.");
+        }
+        else if (playerRig != null)
+        {
+            playerRig.position = new Vector3(
+                s.playerPos[0],
+                s.playerPos[1],
+                s.playerPos[2]
+            );
+
+            playerRig.rotation = new Quaternion(
+                s.playerRot[0],
+                s.playerRot[1],
+                s.playerRot[2],
+                s.playerRot[3]
+            );
+        }
+
+        // --------------------------------------
+        // APPLY MANIPULATOR VALUES
+        // --------------------------------------
+        if (dataManipulator != null)
+        {
+            dataManipulator.SetPointSize(s.pointSize);
+            dataManipulator.SetAlpha(s.alpha);
+            dataManipulator.SetFilter(s.filterMin, s.filterMax);
+
+            if (!s.visibilityOn)
+                dataManipulator.ToggleVisibility();
+        }
+
+        Debug.Log("✔ Session restored!");
+    }
+
 }

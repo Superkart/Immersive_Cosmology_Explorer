@@ -129,4 +129,36 @@ public class DataManipulator : MonoBehaviour
         foreach (GameObject go in clouds)
             go.SetActive(newState);
     }
+
+
+    public void TestSize(float value)
+    {
+        // Get all particle objects
+        var clouds = importer.GetAllPointCloudObjects();
+        if (clouds == null || clouds.Count == 0)
+        {
+            Debug.LogWarning("No point clouds found.");
+            return;
+        }
+
+        Debug.Log("TestSize called: " + value);
+
+        foreach (var cloud in clouds)
+        {
+            var mr = cloud.GetComponent<MeshRenderer>();
+            if (mr == null) continue;
+
+            var mat = mr.material;
+
+            // We test with "_Radius" because your current shader exposes it
+            if (mat.HasProperty("_Radius"))
+            {
+                float radius = Mathf.Lerp(0.01f, 0.2f, value);
+                mat.SetFloat("_Radius", radius);
+            }
+            else
+                Debug.LogWarning("Material has no _Radius property!");
+        }
+    }
+
 }
