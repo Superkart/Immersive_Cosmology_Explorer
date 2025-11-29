@@ -49,7 +49,7 @@ public class NewDataImporter : MonoBehaviour
 
         CreateTimeStepParents();
         ImportData();
-        SetActiveTimeStep(currentTimestepIndex, true);
+        SetActiveTimeStepNew(currentTimestepIndex, true);
         StartAutoPlay();
     }
 
@@ -174,7 +174,10 @@ public class NewDataImporter : MonoBehaviour
         mesh.colors = colors;
         mesh.SetIndices(indices, MeshTopology.Points, 0);
 
+
         GameObject obj = new GameObject("HydroParticles_" + frameNum);
+        Debug.Log("CREATED: " + obj.name + " under parent: " + parent.name);
+
         obj.AddComponent<MeshFilter>().mesh = mesh;
         obj.AddComponent<MeshRenderer>().material = Resources.Load<Material>("PointCloud");
 
@@ -193,6 +196,26 @@ public class NewDataImporter : MonoBehaviour
         if (timestepText != null)
             timestepText.text = "Timestep: " + frameNumbers[index];
     }
+
+    private void SetActiveTimeStepNew(int index, bool active = true)
+    {
+        Debug.Log("🔵 SetActiveTimeStep called. Index = " + index + "  Active = " + active);
+
+        if (index < 0 || index >= timeStepParents.Count)
+        {
+            Debug.LogError("❌ Invalid timestep index: " + index);
+            return;
+        }
+
+        for (int i = 0; i < timeStepParents.Count; i++)
+        {
+            bool shouldBeActive = (i == index && active);
+            timeStepParents[i].SetActive(shouldBeActive);
+
+            Debug.Log("   • TimeStep_" + i + " → " + (shouldBeActive ? "ENABLED" : "disabled"));
+        }
+    }
+
 
     private void StartAutoPlay()
     {
