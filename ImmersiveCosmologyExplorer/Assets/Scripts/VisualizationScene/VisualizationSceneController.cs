@@ -75,6 +75,8 @@ public class VisualizationSceneController : MonoBehaviour
 
         Debug.Log("✔ Session restored!");
     }
+
+
     private void ApplySavedSessionNew(SessionData s)
     {
         if (s == null)
@@ -119,7 +121,20 @@ public class VisualizationSceneController : MonoBehaviour
         {
             dataManipulator.SetPointSize(s.pointSize);
             dataManipulator.SetAlpha(s.alpha);
-            dataManipulator.SetFilter(s.filterMin, s.filterMax);
+
+            // -----------------------
+            // FIXED FILTER RESTORE
+            // -----------------------
+            // EXACT CHECK: only when both are exactly 0 (user never used filter)
+            if (s.filterMin == 0f && s.filterMax == 0f)
+            {
+                Debug.Log("⚠ Restoring default filter range (0 → 1). Saved filter was 0/0.");
+                dataManipulator.SetFilter(0f, 1f);
+            }
+            else
+            {
+                dataManipulator.SetFilter(s.filterMin, s.filterMax);
+            }
 
             if (!s.visibilityOn)
                 dataManipulator.ToggleVisibility();
@@ -127,5 +142,6 @@ public class VisualizationSceneController : MonoBehaviour
 
         Debug.Log("✔ Session restored!");
     }
+
 
 }
