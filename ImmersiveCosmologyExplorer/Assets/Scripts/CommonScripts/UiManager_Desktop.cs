@@ -68,9 +68,10 @@ public class DesktopUiManager : MonoBehaviour
             datasetPathText.text = "Invalid dataset folder!";
             return;
         }
-
+        string folderName = Path.GetFileName(folder);
         // If valid → update UI
-        datasetPathText.text = folder;
+        // datasetPathText.text = folder;
+        datasetPathText.text = folderName;
 
         // store in session manager
         SessionManager.Instance.selectedDataFolder = folder;
