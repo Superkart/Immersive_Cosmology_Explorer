@@ -30,51 +30,45 @@ public class DataManipulator : MonoBehaviour
             var mr = cloud.GetComponent<MeshRenderer>();
             if (mr == null) continue;
 
-            Material mat = mr.material;   // instance
-
+            Material mat = mr.material; // instance
             action(mat);
         }
     }
 
     // ----------------------------------------------------
-    // SIZE
+    // POINT SIZE (NEW SHADER)
     // ----------------------------------------------------
-    public void SetPointSize(float size01)
+    public void SetPointSize(float value)
     {
-        currentPointSize = size01;
-
-        float size = Mathf.Lerp(0.05f, 1.2f, size01);
+        currentPointSize = value;
 
         ForEachMaterial(mat =>
         {
             if (mat.HasProperty("_Size"))
-                mat.SetFloat("_Size", size);
-
-            if (mat.HasProperty("_Radius"))
-                mat.SetFloat("_Radius", size * 0.1f); // adjust for your shader
+                mat.SetFloat("_Size", value);
+            else
+                Debug.LogWarning("Material does NOT have _PointSize");
         });
     }
 
     // ----------------------------------------------------
-    // ALPHA
+    // ALPHA (NEW SHADER)
     // ----------------------------------------------------
-    public void SetAlpha(float alpha01)
+    public void SetAlpha(float value)
     {
-        currentAlpha = alpha01;
-        float a = Mathf.Clamp01(alpha01);
+        currentAlpha = value;
 
         ForEachMaterial(mat =>
         {
             if (mat.HasProperty("_Alpha"))
-                mat.SetFloat("_Alpha", a);
-
-            if (mat.HasProperty("_Transparency"))
-                mat.SetFloat("_Transparency", 1f - a);
+                mat.SetFloat("_Alpha", value);
+            else
+                Debug.LogWarning("Material does NOT have _GlobalAlpha");
         });
     }
 
     // ----------------------------------------------------
-    // FILTER
+    // FILTER RANGE (NEW SHADER)
     // ----------------------------------------------------
     public void SetFilter(float minValue, float maxValue)
     {
@@ -92,7 +86,7 @@ public class DataManipulator : MonoBehaviour
     }
 
     // ----------------------------------------------------
-    // VISIBILITY
+    // VISIBILITY (unchanged)
     // ----------------------------------------------------
     public void ToggleVisibility()
     {
@@ -100,32 +94,9 @@ public class DataManipulator : MonoBehaviour
         if (clouds == null || clouds.Count == 0) return;
 
         bool newState = !clouds[0].activeSelf;
-
         currentVisibility = newState;
 
         foreach (var cloud in clouds)
             cloud.SetActive(newState);
     }
-
-    // ----------------------------------------------------
-    // Test for Shader Radius
-    // ----------------------------------------------------
-
-    public void SetSphereRadius(float radius)
-    {
-        ForEachMaterial(mat =>
-        {
-            if (mat.HasProperty("_Radius"))
-            {
-                mat.SetFloat("_Radius", radius);
-                Debug.Log("Sphere radius set to: " + radius);
-            }
-            else
-            {
-                Debug.LogWarning("Material does NOT have _Radius property");
-            }
-        });
-    }
-
-
 }

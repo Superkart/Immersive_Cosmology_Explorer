@@ -202,14 +202,6 @@ public class NewDataImporter : MonoBehaviour
     }
 
 
-    private void SetActiveTimeStep(int index, bool active = true)
-    {
-        for (int i = 0; i < timeStepParents.Count; i++)
-            timeStepParents[i].SetActive(i == index && active);
-
-        if (timestepText != null)
-            timestepText.text = "Timestep: " + frameNumbers[index];
-    }
 
     private void SetActiveTimeStepNew(int index, bool active = true)
     {
@@ -227,6 +219,21 @@ public class NewDataImporter : MonoBehaviour
             timeStepParents[i].SetActive(shouldBeActive);
 
             Debug.Log("   • TimeStep_" + i + " → " + (shouldBeActive ? "ENABLED" : "disabled"));
+
+            // 🔥 FIX: Fully enable ALL children when timestep becomes active
+            if (shouldBeActive)
+            {
+                EnableAllChildren(timeStepParents[i]);
+            }
+        }
+    }
+
+    private void EnableAllChildren(GameObject parent)
+    {
+        foreach (Transform child in parent.transform)
+        {
+            child.gameObject.SetActive(true);
+            EnableAllChildren(child.gameObject); // recursive ensure
         }
     }
 
@@ -242,7 +249,7 @@ public class NewDataImporter : MonoBehaviour
   
     private void AdvanceTimeStep()
     {
-        SetActiveTimeStep(currentTimestepIndex, false);
+        SetActiveTimeStepNew(currentTimestepIndex, false);
 
         if (currentTimestepIndex < totalTimesteps - 1)
         {
@@ -258,7 +265,7 @@ public class NewDataImporter : MonoBehaviour
             return;
         }
 
-        SetActiveTimeStep(currentTimestepIndex, true);
+        SetActiveTimeStepNew(currentTimestepIndex, true);
     }
 
     public List<GameObject> GetAllPointCloudObjects()
