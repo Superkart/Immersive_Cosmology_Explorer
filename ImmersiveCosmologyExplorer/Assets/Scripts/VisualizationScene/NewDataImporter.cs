@@ -29,6 +29,20 @@ public class NewDataImporter : MonoBehaviour
     public List<int> allFrames = new List<int>();
 
 
+    private void Update()
+    {
+        if (!isTimeLapseActive) return;
+
+        timer += Time.deltaTime;
+
+        if (timer >= delayBetweenTimeSteps)
+        {
+            timer = 0f;
+            AdvanceTimeStep();
+        }
+    }
+
+
     // --- NEW METHOD: Called by Desktop UI ---
     public void LoadDataFromFolder(string folderPath)
     {
@@ -225,19 +239,7 @@ public class NewDataImporter : MonoBehaviour
         Debug.Log("Timeline autoplay started");
     }
 
-    private void Update()
-    {
-        if (!isTimeLapseActive) return;
-
-        timer += Time.deltaTime;
-
-        if (timer >= delayBetweenTimeSteps)
-        {
-            timer = 0f;
-            AdvanceTimeStep();
-        }
-    }
-
+  
     private void AdvanceTimeStep()
     {
         SetActiveTimeStep(currentTimestepIndex, false);

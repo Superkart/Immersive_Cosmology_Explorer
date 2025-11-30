@@ -19,12 +19,17 @@ public class DesktopVisualizationUI : MonoBehaviour
     void Start()
     {
         // Wire slider callbacks
-        transparencySlider.onValueChanged.AddListener(OnTransparencyChange);
+       /* transparencySlider.onValueChanged.AddListener(OnTransparencyChange);
         sizeSlider.onValueChanged.AddListener(OnSizeChange);
 
         pauseButton.onClick.AddListener(PauseTime);
         resumeButton.onClick.AddListener(ResumeTime);
-        saveSessionButton.onClick.AddListener(SaveSession);
+        saveSessionButton.onClick.AddListener(SaveSession);*/
+
+        sizeSlider.onValueChanged.AddListener(OnRadiusChange);
+
+
+
     }
 
     public void OnTransparencyChange(float value)
@@ -52,8 +57,8 @@ public class DesktopVisualizationUI : MonoBehaviour
         saver.SaveSession();
     }
 
-    public void TestSize(float value)
+    public void OnRadiusChange(float value)
     {
-        manipulator.TestSize(value);
+        manipulator.SetSphereRadius(value);
     }
 }

@@ -24,7 +24,7 @@ public class VisualizationSceneController : MonoBehaviour
         // 2.5 🔹 Apply manipulator defaults once clouds exist
         if (dataManipulator != null)
         {
-            dataManipulator.ApplyFromCurrent();
+           // dataManipulator.ApplyFromCurrent();
         }
 
         // 3. Apply session if present (this can override defaults)
