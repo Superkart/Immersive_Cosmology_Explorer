@@ -29,12 +29,9 @@ public class DesktopInputController : MonoBehaviour
 
     void Update()
     {
-        // Toggle UI interaction using ESC
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleUIMode();
-        }
-        
+
+        HandleToggleUiMode();
+
         // If UI mode is on → DO NOT move or rotate camera
         if (uiMode)
             return;
@@ -82,16 +79,18 @@ public class DesktopInputController : MonoBehaviour
     // -------------------------------------------------------------
     // UI MODE TOGGLE
     // -------------------------------------------------------------
-    void ToggleUIMode()
+
+    void HandleToggleUiMode()
     {
-        uiMode = !uiMode;
-
-        if (uiMode)
-            UnlockCursor();
-        else
-            LockCursor();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            uiMode = !uiMode;
+            if (uiMode)
+                UnlockCursor();
+            else
+                LockCursor();
+        }
     }
-
     void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
