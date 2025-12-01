@@ -27,6 +27,15 @@ public class DesktopVisualizationUI : MonoBehaviour
         saveSessionButton.onClick.AddListener(SaveSession);
     }
 
+
+    void Update()
+    {
+        Debug.Log("Slider = " + sizeSlider.value + " | Manip = " + manipulator.currentPointSize);
+
+        sizeSlider.SetValueWithoutNotify(manipulator.currentPointSize);
+    }
+
+
     public void OnTransparencyChange(float value)
     {
         manipulator.SetAlpha(value);  // updates _GlobalAlpha
