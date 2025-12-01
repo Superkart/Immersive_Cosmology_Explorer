@@ -27,53 +27,21 @@ public class VisualizationSceneController : MonoBehaviour
            // dataManipulator.ApplyFromCurrent();
         }
 
+        if (dataManipulator != null)
+        {
+            dataManipulator.InitializeScalarRange(
+                importer.globalMinScalar,
+                importer.globalMaxScalar
+            );
+        }
+
         // 3. Apply session if present (this can override defaults)
         if (SessionManager.Instance.loadedSessionData != null)
         {
             ApplySavedSessionNew(SessionManager.Instance.loadedSessionData);
         }
-    }
 
 
-    private void ApplySavedSession(SessionData s)
-    {
-        if (s == null) return;
-
-        Debug.Log("Applying saved session settings...");
-
-        // ----------------------
-        // APPLY PLAYER POSITION
-        // ----------------------
-        if (playerRig != null && s.playerPos != null && s.playerRot != null)
-        {
-            playerRig.position = new Vector3(
-                s.playerPos[0],
-                s.playerPos[1],
-                s.playerPos[2]
-            );
-
-            playerRig.rotation = new Quaternion(
-                s.playerRot[0],
-                s.playerRot[1],
-                s.playerRot[2],
-                s.playerRot[3]
-            );
-        }
-
-        // ----------------------
-        // APPLY DATA MANIPULATION
-        // ----------------------
-        if (dataManipulator != null)
-        {
-            dataManipulator.SetPointSize(s.pointSize);
-            dataManipulator.SetAlpha(s.alpha);
-            dataManipulator.SetFilter(s.filterMin, s.filterMax);
-
-            if (!s.visibilityOn)
-                dataManipulator.ToggleVisibility();
-        }
-
-        Debug.Log("✔ Session restored!");
     }
 
 

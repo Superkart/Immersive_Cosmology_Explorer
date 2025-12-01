@@ -28,6 +28,9 @@ public class NewDataImporter : MonoBehaviour
     public List<int> frameNumbers = new List<int>();
     public List<int> allFrames = new List<int>();
 
+    // --- GLOBAL SCALAR RANGE (for filtering/shader) ---
+    [HideInInspector] public float globalMinScalar = float.MaxValue;
+    [HideInInspector] public float globalMaxScalar = float.MinValue;
 
     private void Update()
     {
@@ -167,6 +170,12 @@ public class NewDataImporter : MonoBehaviour
             float scalar = float.Parse(vals[0]);
 
             scalarNum[i] = scalar;
+
+            // Track GLOBAL RANGE (across all timesteps)
+            if (scalar < globalMinScalar) globalMinScalar = scalar;
+            if (scalar > globalMaxScalar) globalMaxScalar = scalar;
+
+
             points[i] = new Vector3(x, y, z);
 
             if (scalar < minScalar) minScalar = scalar;

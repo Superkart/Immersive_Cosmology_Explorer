@@ -86,4 +86,13 @@ public class VRLocomotion : MonoBehaviour
         camAngles.x = pitch;
         headTransform.localEulerAngles = camAngles;
     }
+
+
+    private void OnDestroy()
+    {
+        if(inputActions != null)
+        {
+            inputActions.Dispose();
+        }
+    }
 }

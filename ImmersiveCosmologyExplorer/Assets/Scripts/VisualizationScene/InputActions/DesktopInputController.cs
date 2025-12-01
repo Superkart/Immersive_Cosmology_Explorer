@@ -18,7 +18,6 @@ public class DesktopInputController : MonoBehaviour
     private float yaw = 0f;
     private float pitch = 0f;
 
-    // 🔥 UI Mode Toggle
     private bool uiMode = false;
 
     void Start()
@@ -30,11 +29,8 @@ public class DesktopInputController : MonoBehaviour
 
     void Update()
     {
-        // Toggle UI interaction using ESC
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleUIMode();
-        }
+
+        HandleToggleUiMode();
 
         // If UI mode is on → DO NOT move or rotate camera
         if (uiMode)
@@ -77,22 +73,24 @@ public class DesktopInputController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
             speed *= fastSpeedMultiplier;
 
-        transform.position += moveDir * speed * Time.deltaTime;
+        transform.position += moveDir.normalized * speed * Time.deltaTime;
     }
 
     // -------------------------------------------------------------
     // UI MODE TOGGLE
     // -------------------------------------------------------------
-    void ToggleUIMode()
+
+    void HandleToggleUiMode()
     {
-        uiMode = !uiMode;
-
-        if (uiMode)
-            UnlockCursor();
-        else
-            LockCursor();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            uiMode = !uiMode;
+            if (uiMode)
+                UnlockCursor();
+            else
+                LockCursor();
+        }
     }
-
     void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;

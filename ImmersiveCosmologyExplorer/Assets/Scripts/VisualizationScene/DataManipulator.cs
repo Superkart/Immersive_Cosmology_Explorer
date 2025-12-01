@@ -17,6 +17,23 @@ public class DataManipulator : MonoBehaviour
 
     public bool currentVisibility = true;
 
+
+    // ----------------------------------------------
+    // REAL SCALAR RANGE from Importer
+    // ----------------------------------------------
+    private float realMinScalar;
+    private float realMaxScalar;
+
+    public void InitializeScalarRange(float min, float max)
+    {
+        realMinScalar = min;
+        realMaxScalar = max;
+
+        // default filter — show everything
+        SetFilter(0f, 1f);
+    }
+
+
     // ----------------------------------------------------
     // Helper: Apply settings to all materials in all clouds
     // ----------------------------------------------------
@@ -70,8 +87,14 @@ public class DataManipulator : MonoBehaviour
     // ----------------------------------------------------
     // FILTER RANGE (NEW SHADER)
     // ----------------------------------------------------
+
+
     public void SetFilter(float minValue, float maxValue)
     {
+        // SAFEGUARD: prevent invisible dataset
+        if (maxValue <= minValue)
+            maxValue = minValue + 0.0001f;
+
         currentFilterMin = minValue;
         currentFilterMax = maxValue;
 
@@ -83,7 +106,10 @@ public class DataManipulator : MonoBehaviour
             if (mat.HasProperty("_FilterMax"))
                 mat.SetFloat("_FilterMax", maxValue);
         });
+
+        Debug.Log($"Applied filter: {minValue} → {maxValue}");
     }
+
 
     // ----------------------------------------------------
     // VISIBILITY (unchanged)
@@ -99,4 +125,6 @@ public class DataManipulator : MonoBehaviour
         foreach (var cloud in clouds)
             cloud.SetActive(newState);
     }
+
+
 }
