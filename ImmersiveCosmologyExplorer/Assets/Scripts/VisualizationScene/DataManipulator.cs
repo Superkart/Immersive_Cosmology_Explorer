@@ -30,7 +30,11 @@ public class DataManipulator : MonoBehaviour
         realMaxScalar = max;
 
         // default filter — show everything
-        SetFilter(0f, 1f);
+        // Only apply default filter when no session is loaded
+        if (SessionManager.Instance.loadedSessionData == null)
+        {
+            SetFilter(0f, 1f);
+        }
     }
 
 
@@ -66,6 +70,8 @@ public class DataManipulator : MonoBehaviour
             else
                 Debug.LogWarning("Material does NOT have _PointSize");
         });
+        Debug.Log("SetPointSize called: " + value);
+
     }
 
     // ----------------------------------------------------
@@ -125,6 +131,13 @@ public class DataManipulator : MonoBehaviour
         foreach (var cloud in clouds)
             cloud.SetActive(newState);
     }
+
+
+    public float GetPointSize()
+    {
+        return currentPointSize;
+    }
+
 
 
 }
