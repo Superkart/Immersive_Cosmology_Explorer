@@ -18,7 +18,6 @@ public class DesktopInputController : MonoBehaviour
     private float yaw = 0f;
     private float pitch = 0f;
 
-    // 🔥 UI Mode Toggle
     private bool uiMode = false;
 
     void Start()
@@ -77,7 +76,7 @@ public class DesktopInputController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
             speed *= fastSpeedMultiplier;
 
-        transform.position += moveDir * speed * Time.deltaTime;
+        transform.position += moveDir.normalized * speed * Time.deltaTime;
     }
 
     // -------------------------------------------------------------
