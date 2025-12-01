@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 using TMPro;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine.UI;
 
 public class NewDataImporter : MonoBehaviour
 {
@@ -28,7 +29,34 @@ public class NewDataImporter : MonoBehaviour
     public List<int> frameNumbers = new List<int>();
     public List<int> allFrames = new List<int>();
 
+    public TMP_InputField minFilterInput;
+    public TMP_InputField maxFilterInput;
+    public TextMeshProUGUI dataRangeText;
+    public Button applyFilterButton;
+    public Button resetFilterButton;
 
+    private float globalMinScalar = float.MaxValue;
+    private float globalMaxScalar = float.MinValue;
+    private float pendingMinFilter = 0f;
+    private float pendingMaxFilter = 1f;
+
+    private readonly List<Material> pointCloudMaterials = new List<Material>();
+    void Start()
+    {
+
+        Debug.Log($"[Filter] Global Data Range Found: Min={globalMinScalar:F3}, Max={globalMaxScalar:F3}");
+        if (dataRangeText != null)
+        {
+            dataRangeText.text = $"Data Range: Min {globalMinScalar:F3} to Max {globalMaxScalar:F3}";
+        }
+        pendingMinFilter = globalMinScalar;
+        pendingMaxFilter = globalMaxScalar;
+
+        if (minFilterInput != null) minFilterInput.text = "";
+        if (maxFilterInput != null) maxFilterInput.text = "";
+
+        ApplyFilter();
+    }
     private void Update()
     {
         if (!isTimeLapseActive) return;
@@ -283,5 +311,57 @@ public class NewDataImporter : MonoBehaviour
         isTimeLapseActive = true;
     }
 
+    public void StoreFilterValue(string newValue)
+    {
+        float min = globalMinScalar;
+        float max = globalMaxScalar;
 
+        // Use global values if input fields are empty or invalid
+        // Parse Min Value
+        if (minFilterInput != null && float.TryParse(minFilterInput.text, out float parsedMin))
+        {
+            min = parsedMin;
+        }
+
+        // Parse Max Value
+        if (maxFilterInput != null && float.TryParse(maxFilterInput.text, out float parsedMax))
+        {
+            max = parsedMax;
+        }
+
+        // Ensure min <= max logic
+        if (min > max)
+        {
+            pendingMinFilter = max;
+            pendingMaxFilter = min;
+        }
+        else
+        {
+            pendingMinFilter = min;
+            pendingMaxFilter = max;
+        }
+    }
+
+    public void ApplyFilter()
+    {
+        StoreFilterValue("");
+        foreach (var m in pointCloudMaterials)
+        {
+            if (m && m.HasProperty("_FilterMin")) m.SetFloat("_FilterMin", pendingMinFilter);
+            if (m && m.HasProperty("_FilterMax")) m.SetFloat("_FilterMax", pendingMaxFilter);
+        }
+
+        Debug.Log($"[Filter Applied] Range: Min={pendingMinFilter:F3}, Max={pendingMaxFilter:F3}");
+    }
+
+    public void ResetFilter()
+    {
+        pendingMinFilter = globalMinScalar;
+        pendingMaxFilter = globalMaxScalar;
+
+        if (minFilterInput != null) minFilterInput.text = "";
+        if (maxFilterInput != null) maxFilterInput.text = "";
+
+        ApplyFilter();
+    }
 }
