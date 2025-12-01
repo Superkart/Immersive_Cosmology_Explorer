@@ -45,48 +45,6 @@ public class VisualizationSceneController : MonoBehaviour
     }
 
 
-    private void ApplySavedSession(SessionData s)
-    {
-        if (s == null) return;
-
-        Debug.Log("Applying saved session settings...");
-
-        // ----------------------
-        // APPLY PLAYER POSITION
-        // ----------------------
-        if (playerRig != null && s.playerPos != null && s.playerRot != null)
-        {
-            playerRig.position = new Vector3(
-                s.playerPos[0],
-                s.playerPos[1],
-                s.playerPos[2]
-            );
-
-            playerRig.rotation = new Quaternion(
-                s.playerRot[0],
-                s.playerRot[1],
-                s.playerRot[2],
-                s.playerRot[3]
-            );
-        }
-
-        // ----------------------
-        // APPLY DATA MANIPULATION
-        // ----------------------
-        if (dataManipulator != null)
-        {
-            dataManipulator.SetPointSize(s.pointSize);
-            dataManipulator.SetAlpha(s.alpha);
-            dataManipulator.SetFilter(s.filterMin, s.filterMax);
-
-            if (!s.visibilityOn)
-                dataManipulator.ToggleVisibility();
-        }
-
-        Debug.Log("✔ Session restored!");
-    }
-
-
     private void ApplySavedSessionNew(SessionData s)
     {
         if (s == null)
