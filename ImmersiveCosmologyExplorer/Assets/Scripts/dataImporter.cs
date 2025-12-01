@@ -2,11 +2,9 @@
 using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Collections;
 
 public class dataImporter : MonoBehaviour
 {
