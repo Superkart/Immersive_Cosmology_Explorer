@@ -27,11 +27,21 @@ public class VisualizationSceneController : MonoBehaviour
            // dataManipulator.ApplyFromCurrent();
         }
 
+        if (dataManipulator != null)
+        {
+            dataManipulator.InitializeScalarRange(
+                importer.globalMinScalar,
+                importer.globalMaxScalar
+            );
+        }
+
         // 3. Apply session if present (this can override defaults)
         if (SessionManager.Instance.loadedSessionData != null)
         {
             ApplySavedSessionNew(SessionManager.Instance.loadedSessionData);
         }
+
+
     }
 
 

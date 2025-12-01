@@ -35,7 +35,7 @@ public class DesktopInputController : MonoBehaviour
         {
             ToggleUIMode();
         }
-
+        
         // If UI mode is on → DO NOT move or rotate camera
         if (uiMode)
             return;
