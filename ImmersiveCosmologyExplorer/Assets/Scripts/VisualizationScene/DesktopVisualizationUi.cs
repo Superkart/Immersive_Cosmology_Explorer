@@ -31,8 +31,10 @@ public class DesktopVisualizationUI : MonoBehaviour
 
 
     public GameObject exitMenu;
+    public GameObject exitMenu_VR;
     void Start()
     {
+        exitMenu_VR.SetActive(false);
         exitMenu.SetActive(false);
         resumeButton.gameObject.SetActive(false);
         controlPanel.SetActive(true);
@@ -123,5 +125,17 @@ public class DesktopVisualizationUI : MonoBehaviour
     {
         saver.SaveSession();
         Application.Quit();
+    }
+
+    public void OpenExitMenu_VR()
+    {
+        Time.timeScale = 0f;
+        exitMenu_VR.SetActive(true);
+    }
+
+    public void ResumeGame_VR()
+    {
+        Time.timeScale = 1f;
+        exitMenu_VR.SetActive(false);
     }
 }
