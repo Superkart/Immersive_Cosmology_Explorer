@@ -17,6 +17,10 @@ public class DesktopVisualizationUI : MonoBehaviour
     [Header("Buttons")]
     public Button pauseButton;
     public Button resumeButton;
+    public GameObject pauseGameObject;
+    public GameObject resumeGameObject;
+
+
 
     public Button saveSessionButton;
 
@@ -25,9 +29,12 @@ public class DesktopVisualizationUI : MonoBehaviour
     public GameObject showControlsButton;
     public GameObject controlPanel;
 
+
+    public GameObject exitMenu;
     void Start()
     {
-
+        exitMenu.SetActive(false);
+        resumeButton.gameObject.SetActive(false);
         controlPanel.SetActive(true);
         showControlsButton.SetActive(false);
         // Correct callbacks for NEW shader
@@ -67,11 +74,15 @@ public class DesktopVisualizationUI : MonoBehaviour
     public void PauseTime()
     {
         importer.Pause();
+        resumeButton.gameObject.SetActive(true);
+        pauseButton.gameObject.SetActive(false);
     }
 
     public void ResumeTime()
     {
         importer.Resume();
+        resumeButton.gameObject.SetActive(false);
+        pauseButton.gameObject.SetActive(true);
     }
 
     public void SaveSession()
@@ -90,5 +101,27 @@ public class DesktopVisualizationUI : MonoBehaviour
         controlPanel.SetActive(true);
         hideControlsButton.SetActive(true);
         showControlsButton.SetActive(false);
+    }
+
+    public void OpenExitMenu()
+    {
+        Time.timeScale = 0f;
+        exitMenu.SetActive(true);
+    }
+    public void Exitgame()
+    {
+        Application.Quit();
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        exitMenu.SetActive(false);
+    }
+
+    public void SaveAndExit()
+    {
+        saver.SaveSession();
+        Application.Quit();
     }
 }
