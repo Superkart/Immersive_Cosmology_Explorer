@@ -10,13 +10,17 @@ public class DesktopUiManager : MonoBehaviour
     [Header("UI References")]
     public TMP_Text datasetPathText;
     public TMP_Dropdown sessionDropdown;
+    public GameObject warningDatasetLoad;
 
+    public FlashObject flashObject;
     private string sessionsFolder;
 
     private void Start()
     {
+
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            warningDatasetLoad.SetActive(false);
             Debug.Log("⚡ DesktopUiManager.Start() running...");
 
             sessionsFolder = Path.Combine(
@@ -182,7 +186,8 @@ public class DesktopUiManager : MonoBehaviour
         // Require dataset
         if (string.IsNullOrEmpty(SessionManager.Instance.selectedDataFolder))
         {
-            Debug.LogError("❌ No dataset selected!");
+            flashObject.Flash();
+
             return;
         }
 
@@ -317,4 +322,6 @@ public class DesktopUiManager : MonoBehaviour
         int hash = text.GetHashCode();
         return hash.ToString("X");
     }
+
+
 }
