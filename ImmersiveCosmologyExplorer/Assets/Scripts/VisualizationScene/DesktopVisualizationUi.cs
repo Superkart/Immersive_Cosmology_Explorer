@@ -11,9 +11,13 @@ public class DesktopVisualizationUI : MonoBehaviour
     public Slider transparencySlider;
     public Slider sizeSlider;
 
+    public Slider sizeSlider_VR;
+    public Slider transparencySlider_VR;
+
     [Header("Buttons")]
     public Button pauseButton;
     public Button resumeButton;
+
     public Button saveSessionButton;
 
     void Start()
@@ -22,17 +26,23 @@ public class DesktopVisualizationUI : MonoBehaviour
         transparencySlider.onValueChanged.AddListener(OnTransparencyChange);
         sizeSlider.onValueChanged.AddListener(OnSizeChange);
 
+        sizeSlider_VR.onValueChanged.AddListener(OnSizeChange);
+        transparencySlider_VR.onValueChanged.AddListener(OnTransparencyChange);
+
         pauseButton.onClick.AddListener(PauseTime);
         resumeButton.onClick.AddListener(ResumeTime);
+
         saveSessionButton.onClick.AddListener(SaveSession);
     }
 
 
     void Update()
     {
-        Debug.Log("Slider = " + sizeSlider.value + " | Manip = " + manipulator.currentPointSize);
 
         sizeSlider.SetValueWithoutNotify(manipulator.currentPointSize);
+        transparencySlider.SetValueWithoutNotify(manipulator.currentAlpha);
+        sizeSlider_VR.SetValueWithoutNotify(manipulator.currentPointSize);
+        transparencySlider_VR.SetValueWithoutNotify(manipulator.currentAlpha);
     }
 
 
