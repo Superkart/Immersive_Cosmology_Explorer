@@ -20,8 +20,16 @@ public class DesktopVisualizationUI : MonoBehaviour
 
     public Button saveSessionButton;
 
+
+    public GameObject hideControlsButton;
+    public GameObject showControlsButton;
+    public GameObject controlPanel;
+
     void Start()
     {
+
+        controlPanel.SetActive(true);
+        showControlsButton.SetActive(false);
         // Correct callbacks for NEW shader
         transparencySlider.onValueChanged.AddListener(OnTransparencyChange);
         sizeSlider.onValueChanged.AddListener(OnSizeChange);
@@ -69,5 +77,18 @@ public class DesktopVisualizationUI : MonoBehaviour
     public void SaveSession()
     {
         saver.SaveSession();
+    }
+
+    public void HideControls()
+    {
+        controlPanel.SetActive(false);
+        hideControlsButton.SetActive(false);
+        showControlsButton.SetActive(true);
+    }
+    public void ShowControls()
+    {
+        controlPanel.SetActive(true);
+        hideControlsButton.SetActive(true);
+        showControlsButton.SetActive(false);
     }
 }
