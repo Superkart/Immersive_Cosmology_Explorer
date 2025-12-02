@@ -32,6 +32,8 @@ public class DesktopVisualizationUI : MonoBehaviour
 
     public GameObject exitMenu;
     public GameObject exitMenu_VR;
+
+    public GameObject VrToolsPanel;
     void Start()
     {
         exitMenu_VR.SetActive(false);
@@ -130,12 +132,14 @@ public class DesktopVisualizationUI : MonoBehaviour
     public void OpenExitMenu_VR()
     {
         Time.timeScale = 0f;
+        VrToolsPanel.SetActive(false);
         exitMenu_VR.SetActive(true);
     }
 
     public void ResumeGame_VR()
     {
         Time.timeScale = 1f;
+        VrToolsPanel.SetActive(true);
         exitMenu_VR.SetActive(false);
     }
 }
