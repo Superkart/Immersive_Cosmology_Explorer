@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,20 +13,37 @@ public class NewDataImporter : MonoBehaviour
 
     private string dataFolderPath = "";
 
-    private List<GameObject> timeStepParents = new List<GameObject>();
-    private List<GameObject> pointCloudObjects = new List<GameObject>();
+    public List<GameObject> timeStepParents = new List<GameObject>();
+    public List<GameObject> pointCloudObjects = new List<GameObject>();
 
-    private int currentTimestepIndex = 0;
-    private float timer;
-    private bool isTimeLapseActive = false;
+    public int currentTimestepIndex = 0;
+    public float timer;
+    public bool isTimeLapseActive = false;
     public float delayBetweenTimeSteps = 1.0f;
-    private int totalTimesteps;
-    private bool isLooping = false;
-    private bool arePointCloudsVisible = true;
+    public int totalTimesteps;
+    public bool isLooping = false;
+    public bool arePointCloudsVisible = true;
 
-    private List<bool> particleVisibility = new List<bool>();
-    private List<int> frameNumbers = new List<int>();
-    private List<int> allFrames = new List<int>();
+    public List<bool> particleVisibility = new List<bool>();
+    public List<int> frameNumbers = new List<int>();
+    public List<int> allFrames = new List<int>();
+
+    // --- GLOBAL SCALAR RANGE (for filtering/shader) ---
+    [HideInInspector] public float globalMinScalar = float.MaxValue;
+    [HideInInspector] public float globalMaxScalar = float.MinValue;
+
+    private void Update()
+    {
+        if (!isTimeLapseActive) return;
+
+        timer += Time.deltaTime;
+
+        if (timer >= delayBetweenTimeSteps)
+        {
+            timer = 0f;
+            AdvanceTimeStep();
+        }
+    }
 
 
     // --- NEW METHOD: Called by Desktop UI ---
@@ -49,7 +66,7 @@ public class NewDataImporter : MonoBehaviour
 
         CreateTimeStepParents();
         ImportData();
-        SetActiveTimeStep(currentTimestepIndex, true);
+        SetActiveTimeStepNew(currentTimestepIndex, true);
         StartAutoPlay();
     }
 
@@ -153,6 +170,12 @@ public class NewDataImporter : MonoBehaviour
             float scalar = float.Parse(vals[0]);
 
             scalarNum[i] = scalar;
+
+            // Track GLOBAL RANGE (across all timesteps)
+            if (scalar < globalMinScalar) globalMinScalar = scalar;
+            if (scalar > globalMaxScalar) globalMaxScalar = scalar;
+
+
             points[i] = new Vector3(x, y, z);
 
             if (scalar < minScalar) minScalar = scalar;
@@ -174,45 +197,68 @@ public class NewDataImporter : MonoBehaviour
         mesh.colors = colors;
         mesh.SetIndices(indices, MeshTopology.Points, 0);
 
+
         GameObject obj = new GameObject("HydroParticles_" + frameNum);
+        Debug.Log("CREATED: " + obj.name + " under parent: " + parent.name);
+
         obj.AddComponent<MeshFilter>().mesh = mesh;
         obj.AddComponent<MeshRenderer>().material = Resources.Load<Material>("PointCloud");
+
+        // 🟩 FIX — Store the object so DataManipulator can find it
+        pointCloudObjects.Add(obj);
+
         obj.transform.parent = parent.transform;
     }
 
 
-    private void SetActiveTimeStep(int index, bool active = true)
-    {
-        for (int i = 0; i < timeStepParents.Count; i++)
-            timeStepParents[i].SetActive(i == index && active);
 
-        if (timestepText != null)
-            timestepText.text = "Timestep: " + frameNumbers[index];
+    private void SetActiveTimeStepNew(int index, bool active = true)
+    {
+        Debug.Log("🔵 SetActiveTimeStep called. Index = " + index + "  Active = " + active);
+
+        if (index < 0 || index >= timeStepParents.Count)
+        {
+            Debug.LogError("❌ Invalid timestep index: " + index);
+            return;
+        }
+
+        for (int i = 0; i < timeStepParents.Count; i++)
+        {
+            bool shouldBeActive = (i == index && active);
+            timeStepParents[i].SetActive(shouldBeActive);
+
+            Debug.Log("   • TimeStep_" + i + " → " + (shouldBeActive ? "ENABLED" : "disabled"));
+
+            // 🔥 FIX: Fully enable ALL children when timestep becomes active
+            if (shouldBeActive)
+            {
+                EnableAllChildren(timeStepParents[i]);
+            }
+        }
     }
+
+    private void EnableAllChildren(GameObject parent)
+    {
+        foreach (Transform child in parent.transform)
+        {
+            child.gameObject.SetActive(true);
+            EnableAllChildren(child.gameObject); // recursive ensure
+        }
+    }
+
 
     private void StartAutoPlay()
     {
         timer = 0f;
         isTimeLapseActive = true;
+        isLooping = true;
         Debug.Log("Timeline autoplay started");
     }
 
-    private void Update()
-    {
-        if (!isTimeLapseActive) return;
-
-        timer += Time.deltaTime;
-
-        if (timer >= delayBetweenTimeSteps)
-        {
-            timer = 0f;
-            AdvanceTimeStep();
-        }
-    }
-
+  
     private void AdvanceTimeStep()
     {
-        SetActiveTimeStep(currentTimestepIndex, false);
+        SetActiveTimeStepNew(currentTimestepIndex, false);
 
         if (currentTimestepIndex < totalTimesteps - 1)
         {
@@ -228,7 +274,22 @@ public class NewDataImporter : MonoBehaviour
             return;
         }
 
-        SetActiveTimeStep(currentTimestepIndex, true);
+        SetActiveTimeStepNew(currentTimestepIndex, true);
+    }
+
+    public List<GameObject> GetAllPointCloudObjects()
+    {
+        return pointCloudObjects;
+    }
+
+    public void Pause()
+    {
+        isTimeLapseActive = false;
+    }
+
+    public void Resume()
+    {
+        isTimeLapseActive = true;
     }
 
 
