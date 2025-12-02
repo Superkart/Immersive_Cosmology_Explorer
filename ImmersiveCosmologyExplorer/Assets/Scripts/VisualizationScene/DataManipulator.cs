@@ -6,7 +6,7 @@ public class DataManipulator : MonoBehaviour
     [Header("References")]
     public NewDataImporter importer;
 
-    [Range(0f, 1f)]
+    [Range(0f, 2f)]
     public float currentPointSize = 0.2f;
 
     [Range(0f, 1f)]
