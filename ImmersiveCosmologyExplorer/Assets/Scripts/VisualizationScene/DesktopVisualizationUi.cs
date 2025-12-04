@@ -21,6 +21,10 @@ public class DesktopVisualizationUI : MonoBehaviour
     public GameObject resumeGameObject;
 
 
+    public GameObject pauseGameObjectVR;
+    public GameObject resumeGameObject_VR;
+
+
 
     public Button saveSessionButton;
 
@@ -80,12 +84,18 @@ public class DesktopVisualizationUI : MonoBehaviour
         importer.Pause();
         resumeButton.gameObject.SetActive(true);
         pauseButton.gameObject.SetActive(false);
+
+        resumeGameObject_VR.SetActive(true);
+        pauseButton.gameObject.SetActive(false);
     }
 
     public void ResumeTime()
     {
         importer.Resume();
         resumeButton.gameObject.SetActive(false);
+        pauseButton.gameObject.SetActive(true);
+
+        resumeGameObject_VR.SetActive(false);
         pauseButton.gameObject.SetActive(true);
     }
 
