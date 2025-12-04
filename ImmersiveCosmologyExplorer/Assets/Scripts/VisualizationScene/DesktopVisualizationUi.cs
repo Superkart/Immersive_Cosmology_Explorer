@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DesktopVisualizationUI : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class DesktopVisualizationUI : MonoBehaviour
 
     [Header("Sliders")]
     public Slider transparencySlider;
+    public TextMeshProUGUI transparencyValueText_DK;
     public Slider sizeSlider;
+    public TextMeshProUGUI sizeValueText_DK;
 
     public Slider sizeSlider_VR;
     public Slider transparencySlider_VR;
@@ -19,6 +22,8 @@ public class DesktopVisualizationUI : MonoBehaviour
     public Button resumeButton;
     public GameObject pauseGameObject;
     public GameObject resumeGameObject;
+
+
 
 
     public GameObject pauseGameObjectVR;
@@ -56,6 +61,8 @@ public class DesktopVisualizationUI : MonoBehaviour
         resumeButton.onClick.AddListener(ResumeTime);
 
         saveSessionButton.onClick.AddListener(SaveSession);
+        sizeValueText_DK.text = manipulator.currentPointSize.ToString("0.00");
+        transparencyValueText_DK.text = manipulator.currentAlpha.ToString("0.00");
     }
 
 
@@ -72,11 +79,22 @@ public class DesktopVisualizationUI : MonoBehaviour
     public void OnTransparencyChange(float value)
     {
         manipulator.SetAlpha(value);  // updates _GlobalAlpha
+
+        if(transparencyValueText_DK != null)
+        {
+            transparencyValueText_DK.text = value.ToString("0.00"); 
+        }
     }
 
     public void OnSizeChange(float value)
     {
         manipulator.SetPointSize(value); // updates _PointSize
+
+        if (sizeValueText_DK != null)
+        {
+            sizeValueText_DK.text = value.ToString("0.00");
+        }
+
     }
 
     public void PauseTime()
