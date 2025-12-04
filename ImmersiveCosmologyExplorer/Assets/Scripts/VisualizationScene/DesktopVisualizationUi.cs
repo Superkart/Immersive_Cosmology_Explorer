@@ -11,11 +11,14 @@ public class DesktopVisualizationUI : MonoBehaviour
     [Header("Sliders")]
     public Slider transparencySlider;
     public TextMeshProUGUI transparencyValueText_DK;
+    public Slider transparencySlider_VR;
+    public TextMeshProUGUI transparencyValueText_VR;
+
+
     public Slider sizeSlider;
     public TextMeshProUGUI sizeValueText_DK;
-
     public Slider sizeSlider_VR;
-    public Slider transparencySlider_VR;
+    public TextMeshProUGUI sizeValueText_VR;
 
     [Header("Buttons")]
     public Button pauseButton;
@@ -63,6 +66,8 @@ public class DesktopVisualizationUI : MonoBehaviour
         saveSessionButton.onClick.AddListener(SaveSession);
         sizeValueText_DK.text = manipulator.currentPointSize.ToString("0.00");
         transparencyValueText_DK.text = manipulator.currentAlpha.ToString("0.00");
+        sizeValueText_VR.text = manipulator.currentPointSize.ToString("0.00");
+        transparencyValueText_VR.text = manipulator.currentAlpha.ToString("0.00");
     }
 
 
@@ -83,6 +88,7 @@ public class DesktopVisualizationUI : MonoBehaviour
         if(transparencyValueText_DK != null)
         {
             transparencyValueText_DK.text = value.ToString("0.00"); 
+            transparencyValueText_VR.text = value.ToString("0.00");
         }
     }
 
@@ -93,6 +99,7 @@ public class DesktopVisualizationUI : MonoBehaviour
         if (sizeValueText_DK != null)
         {
             sizeValueText_DK.text = value.ToString("0.00");
+            sizeValueText_VR.text = value.ToString("0.00");
         }
 
     }
