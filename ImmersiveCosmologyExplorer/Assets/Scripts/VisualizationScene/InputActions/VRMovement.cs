@@ -15,6 +15,11 @@ public class VRLocomotion : MonoBehaviour
 
     private float pitch = 0f;
 
+    [Header("VR UI Toggle")]
+    public GameObject vrUIPanel;     // drag your VR panel here
+    private InputAction menuButtonAction;  // left controller menu button
+
+
     void Awake()
     {
         inputActions = new InputActions();
@@ -30,12 +35,21 @@ public class VRLocomotion : MonoBehaviour
 
         inputActions.LeftHand.Rotate.performed += OnRotate;
         inputActions.LeftHand.Rotate.canceled += _ => rotateInput = Vector2.zero;
+
+
+        menuButtonAction = inputActions.LeftHand.Menu;   // must exist in InputActions!
+        menuButtonAction.Enable();
+        menuButtonAction.performed += OnMenuPressed;
     }
 
     void OnDisable()
     {
         inputActions.RightHand.Move.performed -= OnMove;
         inputActions.LeftHand.Rotate.performed -= OnRotate;
+
+        if (menuButtonAction != null)
+            menuButtonAction.performed -= OnMenuPressed;
+
 
         inputActions.RightHand.Disable();
         inputActions.LeftHand.Disable();
@@ -49,6 +63,13 @@ public class VRLocomotion : MonoBehaviour
     private void OnRotate(InputAction.CallbackContext context)
     {
         rotateInput = context.ReadValue<Vector2>();
+    }
+
+    private void OnMenuPressed(InputAction.CallbackContext context)
+    {
+        if (vrUIPanel == null) return;
+
+        vrUIPanel.SetActive(!vrUIPanel.activeSelf);
     }
 
     void Update()

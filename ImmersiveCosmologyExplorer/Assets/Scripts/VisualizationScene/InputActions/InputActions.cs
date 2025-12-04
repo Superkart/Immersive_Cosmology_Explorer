@@ -99,6 +99,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""f83dad8c-c090-4e1d-8e42-884e7c400f57"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -110,6 +119,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d11ebab-bfd9-41d3-9a8b-def59399e8ba"",
+                    ""path"": ""<XRController>{LeftHand}/menu"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -149,6 +169,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         // LeftHand
         m_LeftHand = asset.FindActionMap("LeftHand", throwIfNotFound: true);
         m_LeftHand_Rotate = m_LeftHand.FindAction("Rotate", throwIfNotFound: true);
+        m_LeftHand_Menu = m_LeftHand.FindAction("Menu", throwIfNotFound: true);
         // RightHand
         m_RightHand = asset.FindActionMap("RightHand", throwIfNotFound: true);
         m_RightHand_Move = m_RightHand.FindAction("Move", throwIfNotFound: true);
@@ -234,6 +255,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_LeftHand;
     private List<ILeftHandActions> m_LeftHandActionsCallbackInterfaces = new List<ILeftHandActions>();
     private readonly InputAction m_LeftHand_Rotate;
+    private readonly InputAction m_LeftHand_Menu;
     /// <summary>
     /// Provides access to input actions defined in input action map "LeftHand".
     /// </summary>
@@ -249,6 +271,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "LeftHand/Rotate".
         /// </summary>
         public InputAction @Rotate => m_Wrapper.m_LeftHand_Rotate;
+        /// <summary>
+        /// Provides access to the underlying input action "LeftHand/Menu".
+        /// </summary>
+        public InputAction @Menu => m_Wrapper.m_LeftHand_Menu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -278,6 +304,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Rotate.started += instance.OnRotate;
             @Rotate.performed += instance.OnRotate;
             @Rotate.canceled += instance.OnRotate;
+            @Menu.started += instance.OnMenu;
+            @Menu.performed += instance.OnMenu;
+            @Menu.canceled += instance.OnMenu;
         }
 
         /// <summary>
@@ -292,6 +321,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Rotate.started -= instance.OnRotate;
             @Rotate.performed -= instance.OnRotate;
             @Rotate.canceled -= instance.OnRotate;
+            @Menu.started -= instance.OnMenu;
+            @Menu.performed -= instance.OnMenu;
+            @Menu.canceled -= instance.OnMenu;
         }
 
         /// <summary>
@@ -435,6 +467,13 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRotate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "RightHand" which allows adding and removing callbacks.
