@@ -132,55 +132,6 @@ public class DesktopUiManager : MonoBehaviour
     // ---------------------------------------------------------
     // START VISUALIZATION BUTTON
     // ---------------------------------------------------------
-    /*   public void OnClick_StartVisualization()
-       {
-           // Require dataset
-           if (string.IsNullOrEmpty(SessionManager.Instance.selectedDataFolder))
-           {
-               Debug.LogError("❌ No dataset selected!");
-               return;
-           }
-
-           // Validate dataset folder
-           if (!FolderContainsValidDataset(SessionManager.Instance.selectedDataFolder))
-           {
-               Debug.LogError("❌ Selected folder does not contain a valid ICE dataset!");
-               return;
-           }
-
-           // ------------------------------
-           // FIX: ONLY validate session if user actually selected a saved session
-           // ------------------------------
-           bool userSelectedSession =
-               !string.IsNullOrEmpty(SessionManager.Instance.selectedSessionName);
-
-           if (userSelectedSession)
-           {
-               var ses = SessionManager.Instance.loadedSessionData;
-
-               if (ses == null)
-               {
-                   Debug.LogError("❌ Session selection is invalid!");
-                   return;
-               }
-
-               if (ses.datasetId != SessionManager.Instance.currentDatasetID)
-               {
-                   Debug.LogError("❌ Selected session does NOT belong to this dataset!");
-                   return;
-               }
-
-               Debug.Log("Session validated successfully.");
-           }
-           else
-           {
-               Debug.Log("➡ No saved session selected. Starting fresh.");
-           }
-
-           // Start Visualization Scene
-           FindObjectOfType<AppFlowManager>().StartVisualizationScene();
-       }*/
-
     public void OnClick_StartVisualization()
     {
         // Require dataset

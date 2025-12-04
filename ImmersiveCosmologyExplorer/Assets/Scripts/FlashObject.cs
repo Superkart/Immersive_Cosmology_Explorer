@@ -5,6 +5,12 @@ public class FlashObject : MonoBehaviour
     public GameObject target;
     public float duration = 2f;
 
+
+    private void Start()
+    {
+        if (target != null)
+            target.SetActive(false);
+    }
     public void Flash()
     {
         if (target == null) return;

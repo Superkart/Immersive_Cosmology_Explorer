@@ -6,6 +6,7 @@ public class SessionSaver : MonoBehaviour
     [Header("References")]
     public DataManipulator manipulator;
     public Transform playerRig;
+    public FlashObject flashObject ;
 
     private string sessionsFolder;
 
@@ -19,13 +20,7 @@ public class SessionSaver : MonoBehaviour
             Directory.CreateDirectory(sessionsFolder);
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            SaveSession();
-        }
-    }
+
 
     public void SaveSession()
     {
@@ -58,5 +53,6 @@ public class SessionSaver : MonoBehaviour
         File.WriteAllText(filePath, json);
 
         Debug.Log("✔ Session saved: " + filePath);
+        flashObject.Flash();
     }
 }
