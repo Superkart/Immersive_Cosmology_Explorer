@@ -11,6 +11,7 @@ public class DesktopUiManager : MonoBehaviour
     public TMP_Text datasetPathText;
     public TMP_Dropdown sessionDropdown;
     public GameObject warningDatasetLoad;
+    public GameObject visualizeButton;
 
     public FlashObject flashObject;
     private string sessionsFolder;
@@ -20,6 +21,7 @@ public class DesktopUiManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            visualizeButton.SetActive(false);
             warningDatasetLoad.SetActive(false);
             Debug.Log("⚡ DesktopUiManager.Start() running...");
 
@@ -76,8 +78,9 @@ public class DesktopUiManager : MonoBehaviour
         // VALIDATION
         if (!FolderContainsValidDataset(folder))
         {
-            Debug.LogError("❌ Selected folder does not contain valid ICE dataset files!");
             datasetPathText.text = "Invalid dataset folder!";
+            flashObject.Flash();
+            visualizeButton.SetActive(false);
             return;
         }
         string folderName = Path.GetFileName(folder);
@@ -93,6 +96,7 @@ public class DesktopUiManager : MonoBehaviour
 
         Debug.Log("Dataset validated and loaded. ID: " + SessionManager.Instance.currentDatasetID);
         RefreshSessionDropdown();
+        visualizeButton.SetActive(true);
 
     }
 
@@ -103,12 +107,23 @@ public class DesktopUiManager : MonoBehaviour
     {
         string chosen = sessionDropdown.options[index].text;
 
+
+
+
         if (chosen == "New Session")
         {
             SessionManager.Instance.loadedSessionData = null;
             SessionManager.Instance.selectedSessionName = "";
             return;
         }
+
+        // ERROR: session selected but no dataset loaded
+        if (string.IsNullOrEmpty(SessionManager.Instance.selectedDataFolder))
+        {
+            flashObject.Flash();   // shows UI for 2 seconds
+            return;
+        }
+
 
         // Load JSON
         string filePath = Path.Combine(sessionsFolder, chosen + ".json");
@@ -187,39 +202,9 @@ public class DesktopUiManager : MonoBehaviour
     }
 
 
-
-
     // ---------------------------------------------------------
     // REFRESH SESSION DROPDOWN
     // ---------------------------------------------------------
-    /*    private void RefreshSessionDropdown()
-        {
-            sessionDropdown.ClearOptions();
-
-            List<string> options = new List<string>();
-            options.Add("New Session");
-
-            // Don't filter until a dataset is loaded
-            string currentDatasetID = SessionManager.Instance.currentDatasetID;
-
-            if (Directory.Exists(sessionsFolder) && !string.IsNullOrEmpty(currentDatasetID))
-            {
-                foreach (string file in Directory.GetFiles(sessionsFolder, "*.json"))
-                {
-                    string json = File.ReadAllText(file);
-                    SessionData sd = JsonUtility.FromJson<SessionData>(json);
-
-                    // Only include sessions belonging to this dataset
-                    if (sd.datasetId == currentDatasetID)
-                    {
-                        options.Add(Path.GetFileNameWithoutExtension(file));
-                    }
-                }
-            }
-
-            sessionDropdown.AddOptions(options);
-        }*/
-
     private void RefreshSessionDropdown()
     {
         Debug.Log("⚡ RefreshSessionDropdown CALLED");
@@ -274,5 +259,9 @@ public class DesktopUiManager : MonoBehaviour
         return hash.ToString("X");
     }
 
+    public void OnClickExit()
+    {
+        Application.Quit();
+    }
 
 }
