@@ -20,8 +20,6 @@ The repository includes:
 
 Full source code for the Unity application
 
-Technical documentation describing architecture, data flow, and interaction design
-
-A recorded demo video showcasing dataset loading, VR interaction, and time-lapse playback
+Technical documentation describing system architecture, data flow, and interaction design
 
 This project bridges scientific data visualization and immersive XR technology, making complex cosmological simulations more accessible and intuitive to explore.
