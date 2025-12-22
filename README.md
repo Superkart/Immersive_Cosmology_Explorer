@@ -1,69 +1,27 @@
-# Immersive Cosmology Explorer (Unity + VR)
-A Unity 2022.3.62f3 (LTS) project for immersive visualization and collaborative exploration of cosmological datasets in VR and on desktop.
+Immersive Cosmology Explorer
 
-## 1. Prerequisites
+Immersive Cosmology Explorer is a Unity-based VR and desktop application for interactive visualization of large-scale cosmological particle simulation datasets. The project enables researchers and students to explore time-evolving 3D particle data using immersive VR interaction or traditional desktop controls.
 
-Unity Hub and Unity 2022.3.62f3 (LTS)
-Git (version 2.4 or later)
-Git LFS (Large File Storage)
-Optional: VR headset (Meta Quest, HTC Vive) with OpenXR runtime
+The application supports loading multi-timestep CSV-based simulation outputs and renders them as point-cloud visualizations with scalar-based color mapping, filtering, and adjustable transparency. Users can explore spatial structure, animate temporal evolution, and interactively adjust visualization parameters in real time.
 
-## 2. Repository Setup
-If cloning an existing repository:
-git clone <YOUR_REPO_URL>
-cd <repo-folder>
-git lfs install
+Key features include:
 
-If starting a new repository:
-mkdir <repo-folder>
-cd <repo-folder>
-git init
-curl -L https://raw.githubusercontent.com/github/gitignore/main/Unity.gitignore -o .gitignore
-git add .gitignore
-git commit -m "Add Unity .gitignore"
+Custom shader-based point cloud rendering with scalar-driven color gradients
 
-## 3. Open the Project in Unity
-Open Unity Hub and click "Add Project".
-Select the cloned or created folder.
-Once opened, go to Edit → Project Settings → Editor:
-Set "Version Control" to "Visible Meta Files".
-Set "Asset Serialization" to "Force Text".
-Save your main scene as Assets/Scenes/Main.unity.
+Time-series playback across simulation timesteps with manual and automated controls
 
-## 4. XR / VR Setup
-Go to Window → Package Manager and install:
-OpenXR Plugin (1.9 or later)
-XR Interaction Toolkit (version 3 or later)
-XR Management
-Open Edit → Project Settings → XR Plug-in Management and enable OpenXR for your platform.
-Under OpenXR → Features, enable the interaction profiles you need (Meta, HTC, etc.).
+Real-time interaction for point size, opacity, and scalar filtering
 
-Commit your changes:
-git add .
-git commit -m "Configure XR packages and settings"
+Session saving and loading to persist camera position and visualization state
 
-## 5. Basic Git Usage
-git status
-git add .
-git commit -m "Your message"
-git push
-git pull --rebase
+Dual-mode support for desktop and VR using OpenXR and XR Interaction Toolkit
 
-## 6. Git LFS Setup
-Install and configure Git LFS for large binary files:
+The repository includes:
 
-git lfs install
-git lfs track "*.fbx" "*.wav" "*.mp4" "*.tif" "*.exr" "*.zip"
-git add .gitattributes
-git commit -m "Add Git LFS tracking"
-git push
+Full source code for the Unity application
 
-## 7. Running the Project
-Open the project in Unity 2022.3.62f3.
-Open the scene Assets/Scenes/Main.unity.
-Press Play to test in the editor, or build to your VR headset from File → Build Settings.
+Technical documentation describing architecture, data flow, and interaction design
 
-## 8. Troubleshooting
-If Unity packages are missing, delete the "Library" folder and reopen the project.
-If large files are missing, run git lfs pull.
-If VR is not detected, check your active OpenXR runtime (SteamVR, Oculus PC, etc.).
+A recorded demo video showcasing dataset loading, VR interaction, and time-lapse playback
+
+This project bridges scientific data visualization and immersive XR technology, making complex cosmological simulations more accessible and intuitive to explore.
